@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>じゃんけんゲーム</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top-bar">
+    <h1>じゃんけんゲーム</h1>
+    <div class="sound-controls">
+      <button id="bgm-toggle" class="icon-btn" type="button" aria-pressed="false">🎵 BGM: OFF</button>
+      <button id="se-toggle" class="icon-btn" type="button" aria-pressed="true">🔊 効果音: ON</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="scoreboard" aria-label="戦績">
+      <div class="score win"><span class="label">勝ち</span><span id="win-count">0</span></div>
+      <div class="score lose"><span class="label">負け</span><span id="lose-count">0</span></div>
+      <div class="score draw"><span class="label">あいこ</span><span id="draw-count">0</span></div>
+      <div class="score streak"><span class="label">連勝</span><span id="streak-count">0</span></div>
+    </section>
+
+    <section class="arena">
+      <div class="side">
+        <p class="side-name">あなた</p>
+        <div id="player-hand" class="hand-box"></div>
+      </div>
+      <p class="vs">VS</p>
+      <div class="side">
+        <p class="side-name">コンピューター</p>
+        <div id="cpu-hand" class="hand-box"></div>
+      </div>
+    </section>
+
+    <p id="message" class="message" aria-live="polite">手を選んでね！</p>
+
+    <section class="choices" aria-label="手を選ぶ">
+      <button class="choice" type="button" data-hand="0"></button>
+      <button class="choice" type="button" data-hand="1"></button>
+      <button class="choice" type="button" data-hand="2"></button>
+    </section>
+
+    <button id="reset" class="reset-btn" type="button">戦績をリセット</button>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
