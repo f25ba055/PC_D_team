@@ -1,0 +1,244 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-top: #ffe9a8;
+  --bg-bottom: #ffb38a;
+  --card: #ffffff;
+  --text: #3b2a1a;
+  --accent: #ff6b4a;
+  --win: #2bb673;
+  --lose: #e5484d;
+  --draw: #7a8597;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  color: var(--text);
+  background: linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+}
+
+.top-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 24px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  letter-spacing: 0.05em;
+}
+
+.sound-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.75);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background: #fff;
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px 40px;
+  text-align: center;
+}
+
+/* 戦績 */
+.scoreboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 4px;
+  border-radius: 14px;
+  background: var(--card);
+  font-size: 1.6rem;
+  font-weight: bold;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
+}
+
+.score .label {
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+
+.score.win { color: var(--win); }
+.score.lose { color: var(--lose); }
+.score.draw { color: var(--draw); }
+.score.streak { color: var(--accent); }
+
+/* 対戦エリア */
+.arena {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.side-name {
+  margin: 0 0 8px;
+  font-weight: bold;
+}
+
+.hand-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 160px;
+  border-radius: 24px;
+  background: var(--card);
+  font-size: 5rem;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+}
+
+.hand-box img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+
+.hand-box.shake {
+  animation: shake 0.25s ease-in-out infinite;
+}
+
+.hand-box.win { outline: 6px solid var(--win); }
+.hand-box.lose { outline: 6px solid var(--lose); }
+.hand-box.draw { outline: 6px solid var(--draw); }
+
+.vs {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--accent);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-14px) rotate(-8deg); }
+}
+
+/* メッセージ */
+.message {
+  min-height: 2.4em;
+  margin: 24px 0 16px;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.message.win { color: var(--win); animation: pop 0.4s ease-out; }
+.message.lose { color: var(--lose); animation: pop 0.4s ease-out; }
+.message.draw { color: var(--draw); animation: pop 0.4s ease-out; }
+
+@keyframes pop {
+  0% { transform: scale(0.6); }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* 手を選ぶボタン */
+.choices {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 120px;
+  padding: 12px 8px;
+  border: none;
+  border-radius: 20px;
+  background: var(--card);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--text);
+  cursor: pointer;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.12);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.choice .choice-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  font-size: 3rem;
+}
+
+.choice .choice-icon img {
+  height: 100%;
+}
+
+.choice:hover:not(:disabled) {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.choice:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+}
+
+.choice:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.reset-btn {
+  margin-top: 32px;
+  border: none;
+  background: none;
+  font: inherit;
+  color: var(--text);
+  text-decoration: underline;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.reset-btn:hover {
+  opacity: 1;
+}
+
+@media (max-width: 480px) {
+  .hand-box {
+    width: 120px;
+    height: 120px;
+    font-size: 3.6rem;
+  }
+
+  .choice {
+    width: 96px;
+  }
+
+  .message {
+    font-size: 1.4rem;
+  }
+}
