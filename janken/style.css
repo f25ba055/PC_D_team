@@ -1,0 +1,599 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-top: #ffe9a8;
+  --bg-bottom: #ffb38a;
+  --card: #ffffff;
+  --text: #3b2a1a;
+  --accent: #ff6b4a;
+  --win: #2bb673;
+  --lose: #e5484d;
+  --draw: #7a8597;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Cherry Bomb One", "Mochiy Pop One", "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  color: var(--text);
+  /* 背景画像（VHS風の空とチェッカーフロア）。画像がない環境では水色にフォールバック */
+  background: #6db3f2 url("images/bg.jpg") center center / cover fixed no-repeat;
+}
+
+.top-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 24px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  letter-spacing: 0.05em;
+}
+
+.sound-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.75);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background: #fff;
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px 40px;
+  text-align: center;
+}
+
+/* 戦績 */
+.scoreboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 4px;
+  border-radius: 14px;
+  background: var(--card);
+  font-size: 1.6rem;
+  font-weight: 400; /* ポップフォントは太字にすると潰れるので太字指定しない */
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
+}
+
+.score .label {
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+
+.score.win { color: var(--win); }
+.score.lose { color: var(--lose); }
+.score.draw { color: var(--draw); }
+.score.streak { color: var(--accent); }
+
+/* 対戦エリア */
+.arena {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.side-name {
+  margin: 0 0 8px;
+  font-weight: 400; /* ポップフォントは太字にすると潰れるので太字指定しない */
+}
+
+.hand-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 160px;
+  border-radius: 24px;
+  background: var(--card);
+  font-size: 5rem;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+}
+
+.hand-box img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+
+.hand-box.shake {
+  animation: shake 0.25s ease-in-out infinite;
+}
+
+.hand-box.win { outline: 6px solid var(--win); }
+.hand-box.lose { outline: 6px solid var(--lose); }
+.hand-box.draw { outline: 6px solid var(--draw); }
+
+.vs {
+  font-size: 1.6rem;
+  font-weight: 400; /* ポップフォントは太字にすると潰れるので太字指定しない */
+  color: var(--accent);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-14px) rotate(-8deg); }
+}
+
+/* メッセージ */
+.message {
+  min-height: 2.4em;
+  margin: 24px 0 16px;
+  font-size: 1.8rem;
+  font-weight: 400; /* ポップフォントは太字にすると潰れるので太字指定しない */
+}
+
+.message.win { color: var(--win); animation: pop 0.4s ease-out; }
+.message.lose { color: var(--lose); animation: pop 0.4s ease-out; }
+.message.draw { color: var(--draw); animation: pop 0.4s ease-out; }
+
+@keyframes pop {
+  0% { transform: scale(0.6); }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* 手を選ぶボタン */
+.choices {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 120px;
+  padding: 12px 8px;
+  border: none;
+  border-radius: 20px;
+  background: var(--card);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 400; /* ポップフォントは太字にすると潰れるので太字指定しない */
+  color: var(--text);
+  cursor: pointer;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.12);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.choice .choice-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  font-size: 3rem;
+}
+
+.choice .choice-icon img {
+  height: 100%;
+}
+
+.choice:hover:not(:disabled) {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.choice:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+}
+
+.choice:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.reset-btn {
+  margin-top: 32px;
+  border: none;
+  background: none;
+  font: inherit;
+  color: var(--text);
+  text-decoration: underline;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.reset-btn:hover {
+  opacity: 1;
+}
+
+@media (max-width: 480px) {
+  .hand-box {
+    width: 120px;
+    height: 120px;
+    font-size: 3.6rem;
+  }
+
+  .choice {
+    width: 96px;
+  }
+
+  .message {
+    font-size: 1.4rem;
+  }
+}
+
+/* 設定（モード・難易度） */
+.controls {
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.65);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.06);
+}
+
+.control-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 12px;
+  margin-bottom: 8px;
+}
+
+.control-label {
+  font-size: 0.85rem;
+  font-weight: 400; /* ポップフォントは太字にすると潰れるので太字指定しない */
+}
+
+.segmented {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.seg-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 6px 14px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.seg-btn.active {
+  background: var(--card);
+  font-weight: 400; /* ポップフォントは太字にすると潰れるので太字指定しない */
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+}
+
+.control-note {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+/* マッチスコア */
+.matchboard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 10px 16px;
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
+  font-weight: 400; /* ポップフォントは太字にすると潰れるので太字指定しない */
+}
+
+.matchboard[hidden] {
+  display: none;
+}
+
+.match-side {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.match-score {
+  font-size: 1.4rem;
+  color: var(--accent);
+}
+
+.pips {
+  display: inline-flex;
+  gap: 5px;
+}
+
+.pip {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: transparent;
+}
+
+.pip.on {
+  background: var(--accent);
+}
+
+/* 戦績の追加項目 */
+.scoreboard {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.score.best { color: #b07d10; }
+.score.rate { color: #4a6cff; }
+
+.score.streak.fire {
+  animation: fire-pulse 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes fire-pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.06); }
+}
+
+/* キーボードヒント */
+.key-hint {
+  margin: 12px 0 0;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+/* もう一試合ボタン */
+.next-match-btn {
+  margin-top: 20px;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 28px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 400; /* ポップフォントは太字にすると潰れるので太字指定しない */
+  cursor: pointer;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.15);
+}
+
+.next-match-btn:hover {
+  filter: brightness(1.07);
+}
+
+.next-match-btn[hidden] {
+  display: none;
+}
+
+/* 対戦履歴 */
+.history {
+  margin-top: 36px;
+}
+
+.history h2 {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+}
+
+.history-empty {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.history-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--card);
+  font-size: 0.95rem;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.08);
+}
+
+.history-result {
+  font-size: 0.8rem;
+  font-weight: 400; /* ポップフォントは太字にすると潰れるので太字指定しない */
+}
+
+.history-item.win .history-result { color: var(--win); }
+.history-item.lose .history-result { color: var(--lose); }
+.history-item.draw .history-result { color: var(--draw); }
+
+/* 紙吹雪 */
+.confetti {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.confetti i {
+  position: absolute;
+  top: -16px;
+  width: 10px;
+  height: 16px;
+  border-radius: 2px;
+  animation: confetti-fall 2.6s ease-in forwards;
+}
+
+@keyframes confetti-fall {
+  to {
+    transform: translateY(105vh) rotate(720deg);
+    opacity: 0.7;
+  }
+}
+
+/* 背景画像の上で文字を読みやすくする */
+h1,
+.side-name,
+.vs,
+.message,
+.key-hint,
+.history h2,
+.reset-btn {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.85),
+    0 0 10px rgba(255, 255, 255, 0.75),
+    0 0 22px rgba(255, 255, 255, 0.6);
+}
+
+/* ===== レトロフォント＆読みやすさ調整 ===== */
+/* 背景画像の上でも読めるよう、本文エリアに半透明のパネルを敷く */
+main {
+  margin-bottom: 32px;
+  padding-top: 20px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* タイトルもピル型のパネルに乗せる */
+h1 {
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
+}
+
+/* 強い白ハローはフォントがにじむので、弱めに差し替え */
+h1,
+.side-name,
+.vs,
+.message,
+.key-hint,
+.history h2,
+.reset-btn {
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+/* 飾りフォントは小さすぎると読みにくいので、小さめ文字を少し大きく */
+.control-label,
+.control-note,
+.score .label,
+.key-hint,
+.history-empty,
+.history-result {
+  font-size: 0.92rem;
+}
+
+.message {
+  letter-spacing: 0.04em;
+}
+
+/* ===== 袋文字＋凹み影（Z世代サンプル風） ===== */
+/* 土台のフォントに、紫の縁取り＋上下グラデーション＋落ち影で「凹み影入れ」を再現する。
+   大きな見出しだけに使う（本文に使うと読みにくくなるため）。 */
+h1,
+.vs,
+.history h2 {
+  background: linear-gradient(180deg, #ffffff 15%, #ded8ff 55%, #a99bf0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 2px #7a68d8;
+  filter: drop-shadow(0 3px 0 rgba(122, 104, 216, 0.35))
+    drop-shadow(0 7px 9px rgba(90, 70, 180, 0.18));
+  text-shadow: none;
+}
+
+h1 {
+  padding: 6px 10px;
+  box-shadow: none;
+}
+
+.vs {
+  font-size: 2rem;
+}
+
+.history h2 {
+  -webkit-text-stroke-width: 1.5px;
+}
+
+/* ===== パネルをネオンレトロな半透明グラデーションに＋履歴見出しの読みやすさ ===== */
+main {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 170, 214, 0.55),
+    rgba(178, 164, 255, 0.55) 38%,
+    rgba(150, 228, 255, 0.55) 72%,
+    rgba(255, 240, 175, 0.52)
+  );
+}
+
+/* 対戦履歴の見出しはグラデーション文字だと薄くて読みにくいので、濃い紫のベタ塗りに戻す */
+.history h2 {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  color: #5b34d6;
+  -webkit-text-stroke: 0;
+  filter: none;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+  font-size: 1.25rem;
+}
+
+/* ===== 対戦履歴の見出し：色を反転させて読みやすく ===== */
+/* 薄いパネルの上に文字だけ置くと背景のチェック柄で読みにくいので、
+   濃い紫のピルに白文字にする */
+.history h2 {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 6px 22px;
+  border-radius: 999px;
+  background: #5b34d6;
+  color: #ffffff;
+  text-shadow: none;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.18);
+}
+
+.history-empty {
+  color: #2e1a47;
+  font-weight: 400; /* ポップフォントは太字にすると潰れるので太字指定しない */
+}
+
+/* 見出しのブラウザ標準の太字も、ポップフォントでは潰れるので切る */
+h1,
+h2 {
+  font-weight: 400;
+}

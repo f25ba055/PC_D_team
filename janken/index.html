@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>じゃんけんゲーム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Mochiy+Pop+One&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top-bar">
+    <h1>じゃんけんゲーム</h1>
+    <div class="sound-controls">
+      <button id="bgm-toggle" class="icon-btn" type="button" aria-pressed="false">🎵 BGM: OFF</button>
+      <button id="se-toggle" class="icon-btn" type="button" aria-pressed="true">🔊 効果音: ON</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="controls" aria-label="ゲーム設定">
+      <div class="control-group">
+        <span class="control-label">モード</span>
+        <div class="segmented" role="group" aria-label="モード">
+          <button type="button" class="seg-btn" data-mode="free">フリープレイ</button>
+          <button type="button" class="seg-btn" data-mode="match">マッチ（3勝先取）</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <span class="control-label">CPUの強さ</span>
+        <div class="segmented" role="group" aria-label="CPUの強さ">
+          <button type="button" class="seg-btn" data-difficulty="easy">やさしい</button>
+          <button type="button" class="seg-btn" data-difficulty="normal">ふつう</button>
+          <button type="button" class="seg-btn" data-difficulty="hard">つよい</button>
+        </div>
+      </div>
+      <p id="difficulty-note" class="control-note"></p>
+    </section>
+
+    <section id="matchboard" class="matchboard" aria-label="マッチスコア" hidden>
+      <div class="match-side">
+        <span class="match-name">あなた</span>
+        <span id="player-pips" class="pips"></span>
+      </div>
+      <span class="match-score"><span id="match-player">0</span> - <span id="match-cpu">0</span></span>
+      <div class="match-side">
+        <span id="cpu-pips" class="pips"></span>
+        <span class="match-name">CPU</span>
+      </div>
+    </section>
+
+    <section class="scoreboard" aria-label="戦績">
+      <div class="score win"><span class="label">勝ち</span><span id="win-count">0</span></div>
+      <div class="score lose"><span class="label">負け</span><span id="lose-count">0</span></div>
+      <div class="score draw"><span class="label">あいこ</span><span id="draw-count">0</span></div>
+      <div class="score streak" id="streak-box"><span class="label">連勝</span><span id="streak-count">0</span></div>
+      <div class="score best"><span class="label">最高連勝</span><span id="best-streak-count">0</span></div>
+      <div class="score rate"><span class="label">勝率</span><span id="win-rate">0%</span></div>
+    </section>
+
+    <section class="arena">
+      <div class="side">
+        <p class="side-name">あなた</p>
+        <div id="player-hand" class="hand-box"></div>
+      </div>
+      <p class="vs">VS</p>
+      <div class="side">
+        <p class="side-name">コンピューター</p>
+        <div id="cpu-hand" class="hand-box"></div>
+      </div>
+    </section>
+
+    <p id="message" class="message" aria-live="polite">手を選んでね！</p>
+
+    <section class="choices" aria-label="手を選ぶ">
+      <button class="choice" type="button" data-hand="0"></button>
+      <button class="choice" type="button" data-hand="1"></button>
+      <button class="choice" type="button" data-hand="2"></button>
+    </section>
+    <p class="key-hint">キーボードでも遊べるよ： 1 = グー / 2 = チョキ / 3 = パー</p>
+
+    <button id="next-match" class="next-match-btn" type="button" hidden>もう一試合する</button>
+
+    <section class="history" aria-label="対戦履歴">
+      <h2>対戦履歴</h2>
+      <p id="history-empty" class="history-empty">まだ対戦していないよ</p>
+      <ul id="history-list" class="history-list"></ul>
+    </section>
+
+    <button id="reset" class="reset-btn" type="button">戦績をリセット</button>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
